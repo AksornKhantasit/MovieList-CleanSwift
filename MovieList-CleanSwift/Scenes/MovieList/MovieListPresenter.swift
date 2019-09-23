@@ -25,9 +25,9 @@ class MovieListPresenter: MovieListPresenterInterface {
         let title = movie.title
         let popular = "\(movie.popularity)"
         let rating = "\(0.00000)"
-//        let movieImageURL = movie.posterPath
-//        let backdropImageURL = movie.backdropPath
-        let MovieViewModel = MovieList.GetMovies.ViewModel.MovieViewModel(title: title, popular: popular, rating: rating)
+        let movieImageURL = movie.posterPath
+        let backdropImageURL = movie.backdropPath
+        let MovieViewModel = MovieList.GetMovies.ViewModel.MovieViewModel(title: title, popular: popular, rating: rating, movieImage: movieImageURL, backdropImage: backdropImageURL)
         movieViewModels.append(MovieViewModel)
     }
     let viewModel = MovieList.GetMovies.ViewModel(movieViewModels: movieViewModels)

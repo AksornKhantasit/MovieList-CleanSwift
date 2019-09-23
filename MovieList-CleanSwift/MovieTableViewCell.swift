@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class MovieTableViewCell: UITableViewCell {
 
@@ -18,11 +19,21 @@ class MovieTableViewCell: UITableViewCell {
     
     
     func setupUI(viewModel: MovieList.GetMovies.ViewModel.MovieViewModel){
-       // backdropImage.image = viewModel.backdropImage
         title.text = viewModel.title
         popular.text = viewModel.popular
         rating.text = viewModel.rating
         
+        let baseURL = "https://image.tmdb.org/t/p/original"
+        let posterPath = viewModel.movieImage
+        let backdropPath = viewModel.backdropImage
+        if let posterPath = posterPath {
+            let url = URL(string: "\(baseURL)\(posterPath)")
+            movieImage.kf.setImage(with: url)
+        }
+        if let backdropPath = backdropPath {
+            let url = URL(string: "\(baseURL)\(backdropPath)")
+            backdropImage.kf.setImage(with: url)
+        }
         
     }
     

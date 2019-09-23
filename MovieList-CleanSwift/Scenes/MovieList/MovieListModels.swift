@@ -23,8 +23,8 @@ struct MovieList {
             let title: String
             let popular: String
             let rating: String
-//            let movieImage: String
-//            let backdropImage: String
+            let movieImage: String?
+            let backdropImage: String?
         }
         var movieViewModels: [MovieViewModel]
     }
