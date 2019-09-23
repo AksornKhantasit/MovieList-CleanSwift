@@ -7,9 +7,9 @@
 //
 
 import UIKit
-/*
+
 protocol MovieListStoreProtocol {
-  func getData(_ completion: @escaping (Result<Entity>) -> Void)
+  func getMovies(page: Int, sortBy: String, _ completion: @escaping (Result<Movie, APIError>) -> Void)
 }
 
 class MovieListWorker {
@@ -21,13 +21,11 @@ class MovieListWorker {
   }
 
   // MARK: - Business Logic
-
-  func doSomeWork(_ completion: @escaping (Result<Entity>) -> Void) {
-    // NOTE: Do the work
-    store.getData {
-      // The worker may perform some small business logic before returning the result to the Interactor
-      completion($0)
+    
+    func getMovies(page: Int, sortBy: String, _ completion: @escaping (Result<Movie, APIError>) -> Void) {
+        store.getMovies(page: page, sortBy: sortBy) { result in
+            completion(result)
+        }
     }
-  }
 }
-*/
+

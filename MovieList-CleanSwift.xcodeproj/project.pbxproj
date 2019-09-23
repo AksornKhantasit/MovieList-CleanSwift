@@ -119,9 +119,9 @@
 		050A28E92337D9CC00BFFD4C /* MovieList-CleanSwift */ = {
 			isa = PBXGroup;
 			children = (
-				050A292B2337DBB800BFFD4C /* Models */,
-				050A292A2337DB8D00BFFD4C /* Services */,
 				050A29292337DB6100BFFD4C /* Scenes */,
+				050A292A2337DB8D00BFFD4C /* Services */,
+				050A292B2337DBB800BFFD4C /* Models */,
 				050A28EA2337D9CC00BFFD4C /* AppDelegate.swift */,
 				050A28EE2337D9CC00BFFD4C /* Main.storyboard */,
 				050A28F12337D9CD00BFFD4C /* Assets.xcassets */,

@@ -9,29 +9,27 @@
 import UIKit
 
 protocol MovieListViewControllerInterface: class {
-  func displaySomething(viewModel: MovieList.GetMovies.ViewModel)
+  func displayMovies(viewModel: MovieList.GetMovies.ViewModel)
 }
 
-//class MovieListViewController: UIViewController, MovieListViewControllerInterface {
-//  var interactor: MovieListInteractorInterface!
-//  var router: MovieListRouter!
-class MovieListViewController: UIViewController {
-
+class MovieListViewController: UIViewController, MovieListViewControllerInterface {
+  var interactor: MovieListInteractorInterface!
+  //var router: MovieListRouter!
 
     @IBOutlet weak var tableView: UITableView!
     
   // MARK: - Object lifecycle
 
-//  override func awakeFromNib() {
-//    super.awakeFromNib()
-//    configure(viewController: self)
-//  }
+  override func awakeFromNib() {
+    super.awakeFromNib()
+    configure(viewController: self)
+  }
 
   // MARK: - Configuration
-/*
+
   private func configure(viewController: MovieListViewController) {
-    let router = MovieListRouter()
-    router.viewController = viewController
+//    let router = MovieListRouter()
+//    router.viewController = viewController
 
     let presenter = MovieListPresenter()
     presenter.viewController = viewController
@@ -41,9 +39,9 @@ class MovieListViewController: UIViewController {
     interactor.worker = MovieListWorker(store: MovieListStore())
 
     viewController.interactor = interactor
-    viewController.router = router
+//    viewController.router = router
   }
-*/
+
   // MARK: - View lifecycle
 
   override func viewDidLoad() {
@@ -51,26 +49,25 @@ class MovieListViewController: UIViewController {
     let bundle = Bundle(for: MovieTableViewCell.self)
     let nib = UINib(nibName: "MovieTableViewCell", bundle: bundle)
     tableView.register(nib, forCellReuseIdentifier: "MovieTableViewCell")
-    //doSomethingOnLoad()
+    getMovies()
   }
 
   // MARK: - Event handling
-/*
-  func doSomethingOnLoad() {
-    // NOTE: Ask the Interactor to do some work
-
-    let request = MovieList.GetMovies.Request()
-    interactor.doSomething(request: request)
-  }
-*/
+    func getMovies() {
+        //loadingView.isHidden = false
+        let request = MovieList.GetMovies.Request()
+        interactor.getMovies(request: request)
+    }
+    
   // MARK: - Display logic
     
     var movieViewModels: [MovieList.GetMovies.ViewModel.MovieViewModel] = []
 
-  func displaySomething(viewModel: MovieList.GetMovies.ViewModel) {
+  func displayMovies(viewModel: MovieList.GetMovies.ViewModel) {
     // NOTE: Display the result from the Presenter
-
-    // nameTextField.text = viewModel.name
+//     loadingView.isHidden = true
+    movieViewModels.append(contentsOf: viewModel.movieViewModels)
+    tableView.reloadData()
   }
 
   // MARK: - Router
@@ -88,16 +85,16 @@ class MovieListViewController: UIViewController {
 
 extension MovieListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return movies.count
-        return 5
+
+        return movieViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell", for: indexPath) as? MovieTableViewCell else {
             return UITableViewCell()
         }
-//        let movie = movies[indexPath.row]
-//        cell.setupUI(movie: movie)
+        let viewModel = movieViewModels[indexPath.row]
+        cell.setupUI(viewModel: viewModel)
         return cell
     }
 }

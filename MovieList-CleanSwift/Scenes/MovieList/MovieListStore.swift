@@ -18,13 +18,22 @@ import Foundation
 
  */
 
-/*
+
 class MovieListStore: MovieListStoreProtocol {
-  func getData(_ completion: @escaping (Result<Entity>) -> Void) {
+   
+    
+    
+    func getMovies(page: Int, sortBy: String, _ completion: @escaping (Result<Movie, APIError>) -> Void) {
     // Simulates an asynchronous background thread that calls back on the main thread after 2 seconds
-    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-      completion(Result.success(Entity()))
-    }
+        let apiManager = APIManager()
+        apiManager.getMovies(page: page, sortBy: sortBy) { (result) in
+            DispatchQueue.main.sync {
+                completion(result)
+            }
+        }
+//    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//      completion(Result.success(Entity()))
+//    }
   }
 }
-*/
+

@@ -14,16 +14,17 @@ struct MovieList {
     /// Data struct sent to Interactor
     struct Request {}
     /// Data struct sent to Presenter
-    struct Response {}
-    let movies: [Movie]
+    struct Response {
+        let movies: [Results]
+    }
     /// Data struct sent to ViewController
     struct ViewModel {
         struct MovieViewModel {
             let title: String
             let popular: String
             let rating: String
-            let movieImage: String
-            let backdropImage: String
+//            let movieImage: String
+//            let backdropImage: String
         }
         var movieViewModels: [MovieViewModel]
     }
