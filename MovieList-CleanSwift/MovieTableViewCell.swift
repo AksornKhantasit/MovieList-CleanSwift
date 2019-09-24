@@ -19,10 +19,18 @@ class MovieTableViewCell: UITableViewCell {
     
     
     func setupUI(viewModel: MovieList.GetMovies.ViewModel.MovieViewModel){
+      
         title.text = viewModel.title
         popular.text = viewModel.popular
-        rating.text = viewModel.rating
+        //rating.text = viewModel.rating
+      let getavg = UserDefaults.standard.double(forKey: "avg\(viewModel.id)") ?? 0.0
+      if getavg == 0.0 {
+        rating.text = String(viewModel.rating)
         
+      }
+      else {
+        rating.text = String(format: "%.1f", getavg ?? 0.0)
+      }
         let baseURL = "https://image.tmdb.org/t/p/original"
         let posterPath = viewModel.movieImage
         let backdropPath = viewModel.backdropImage

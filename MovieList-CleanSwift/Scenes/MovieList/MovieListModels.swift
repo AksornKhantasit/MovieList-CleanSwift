@@ -9,24 +9,46 @@
 import UIKit
 
 struct MovieList {
-  /// This structure represents a use case
+  
   struct GetMovies {
-    /// Data struct sent to Interactor
     struct Request {}
-    /// Data struct sent to Presenter
     struct Response {
-        let movies: [Results]
+      let movies: [Results]
     }
-    /// Data struct sent to ViewController
+    
     struct ViewModel {
-        struct MovieViewModel {
-            let title: String
-            let popular: String
-            let rating: String
-            let movieImage: String?
-            let backdropImage: String?
-        }
-        var movieViewModels: [MovieViewModel]
+      struct MovieViewModel {
+        let id: Int
+        let title: String
+        let popular: String
+        let rating: String
+        let movieImage: String?
+        let backdropImage: String?
+        
+      }
+      var movieViewModels: [MovieViewModel]
     }
+  }
+  
+  struct SetSelectedIndex {
+    struct Request {
+      let id: Int
+    }
+    struct Response {}
+    struct ViewModel {}
+  }
+  
+  struct SetSort {
+    struct Request {
+      let sortBy: String
+    }
+    struct Response {}
+    struct ViewModel {}
+  }
+  
+  struct PullRefresh  {
+    struct Request {}
+    struct Response {}
+    struct ViewModel {}
   }
 }

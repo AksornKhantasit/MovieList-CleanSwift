@@ -19,6 +19,12 @@ class APIManager {
         request(urlString: urlString, completion: completion)
     }
     
+    func getMovieDetail(id: Int, completion: @escaping (Result<MovieDetail, APIError>) -> Void) {
+        let urlString = "https://api.themoviedb.org/3/movie/\(id)?api_key=328c283cd27bd1877d9080ccb1604c91"
+        request(urlString: urlString, completion: completion)
+    }
+    
+    
     private func request<T: Codable>(urlString: String, completion: @escaping (Result<T, APIError>) -> Void) {
         guard let url = URL(string: urlString) else {
             return

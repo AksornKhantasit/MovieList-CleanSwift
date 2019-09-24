@@ -10,42 +10,64 @@ import UIKit
 
 protocol MovieListInteractorInterface {
   func getMovies(request: MovieList.GetMovies.Request)
+  func setSelectedID(request: MovieList.SetSelectedIndex.Request)
+  func setSort(request: MovieList.SetSort.Request)
+  func pullRefresh(request: MovieList.PullRefresh.Request)
   var movies: [Results]? { get }
+  var selectedID: Int? { get }
 }
 
 class MovieListInteractor: MovieListInteractorInterface {
-    var presenter: MovieListPresenterInterface!
-    var worker: MovieListWorker?
-    var movies: [Results]?
-    var page: Int = 1
-    enum SortB : String{
-        case desc
-        case asc
-    }
-    var sortBy: SortB = .desc
-
+  
+  var presenter: MovieListPresenterInterface!
+  var worker: MovieListWorker?
+  var movies: [Results]?
+  var page: Int = 1
+  var selectedID: Int?
+  var sortBy: SortB = .desc
+  
   // MARK: - Business logic
-
+  
   func getMovies(request: MovieList.GetMovies.Request) {
     worker?.getMovies(page: page, sortBy: sortBy.rawValue) { [weak self] apiResponse in
-        switch apiResponse {
-        case .success(let movies):
-            self?.movies = movies.results
-            let response = MovieList.GetMovies.Response(movies: movies.results)
-            self?.presenter.presentMovies(response: response)
-            self?.page += 1
-        case .failure(let error):
-            print(error) // show error
+      switch apiResponse {
+      case .success(let movies):
+        if self?.page == 1 {
+          self?.movies = movies.results
         }
-
-//      if case let Result.success(data) = $0 {
-//        // If the result was successful, we keep the data so that we can deliver it to another view controller through the router.
-//        self?.model = data
-//      }
-//
-//      // NOTE: Pass the result to the Presenter. This is done by creating a response model with the result from the worker. The response could contain a type like UserResult enum (as declared in the SCB Easy project) with the result as an associated value.
-//      let response = MovieList.GetMovies.Response()
-//      self?.presenter.presentSomething(response: response)
+        else {
+          self?.movies?.append(contentsOf: movies.results)
+        }
+        let response = MovieList.GetMovies.Response(movies: self?.movies ?? [])
+        self?.presenter.presentMovies(response: response)
+        self?.page += 1
+      case .failure(let error):
+        print(error)
+      }
     }
+  }
+  
+  func setSelectedID(request: MovieList.SetSelectedIndex.Request) {
+    selectedID = request.id
+    let response = MovieList.SetSelectedIndex.Response()
+    presenter.presentSelectedIndex(response: response)
+  }
+  
+  func setSort(request: MovieList.SetSort.Request) {
+    if request.sortBy == "asc" {
+      sortBy = .asc
+      page = 1
+    } else {
+      sortBy = .desc
+      page = 1
+    }
+    let response = MovieList.SetSort.Response()
+    presenter.SetSort(response: response)
+  }
+  
+  func pullRefresh(request: MovieList.PullRefresh.Request) {
+    page = 1
+    let response = MovieList.PullRefresh.Response()
+    presenter.pullRefresh(response: response)
   }
 }

@@ -1,17 +1,12 @@
 //
-//  MovieListEntity.swift
+//  MovieDetailEntity.swift
 //  MovieList-CleanSwift
 //
-//  Created by Aksorn Khantasit on 22/9/2562 BE.
+//  Created by Aksorn Khantasit on 23/9/2562 BE.
 //  Copyright (c) 2562 Aksorn. All rights reserved.
 //
 
 import Foundation
-
-enum SortB : String{
-  case desc
-  case asc
-}
 
 /*
 
@@ -25,14 +20,13 @@ enum SortB : String{
  5. Remove the following comments from this file.
 
  */
-/*
-enum Result<T> {
-  case success(T)
-  case failure(Error)
-}
 
+//enum Result<T> {
+//  case success(T)
+//  case failure(Error)
+//}
 //
-// The entity or business object
-//
-struct Entity {}
-*/
+////
+//// The entity or business object
+////
+//struct Entity {}

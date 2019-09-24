@@ -13,19 +13,19 @@ protocol MovieListStoreProtocol {
 }
 
 class MovieListWorker {
-
+  
   var store: MovieListStoreProtocol
-
+  
   init(store: MovieListStoreProtocol) {
     self.store = store
   }
-
+  
   // MARK: - Business Logic
-    
-    func getMovies(page: Int, sortBy: String, _ completion: @escaping (Result<Movie, APIError>) -> Void) {
-        store.getMovies(page: page, sortBy: sortBy) { result in
-            completion(result)
-        }
+  
+  func getMovies(page: Int, sortBy: String, _ completion: @escaping (Result<Movie, APIError>) -> Void) {
+    store.getMovies(page: page, sortBy: sortBy) { result in
+      completion(result)
     }
+  }
 }
 

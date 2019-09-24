@@ -36,16 +36,29 @@ struct Results: Codable {
 }
 
 struct MovieDetail: Codable {
+    let id: Double
+    let posterPath: String?
+    let title: String
+    let popularity: Double
+    let overview: String
     let genres: [Genres]
     let Language: String
+    let voteCount: Double
+    let voteAverage: Double
     
     private enum CodingKeys: String, CodingKey {
+        case id
+        case posterPath = "poster_path"
+        case title
+        case popularity
+        case overview
         case genres
         case Language = "original_language"
+        case voteCount = "vote_count"
+        case voteAverage = "vote_average"
     }
 }
 
 struct Genres: Codable {
-    //let id: Int
     let name: String
 }
