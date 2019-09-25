@@ -13,7 +13,7 @@ struct MovieList {
   struct GetMovies {
     struct Request {}
     struct Response {
-      let movies: [Results]
+      let result: Result<[Results], Error>
     }
     
     struct ViewModel {
@@ -22,11 +22,11 @@ struct MovieList {
         let title: String
         let popular: String
         let rating: String
-        let movieImage: String?
-        let backdropImage: String?
+        let movieImage: URL?
+        let backdropImage: URL?
         
       }
-      var movieViewModels: [MovieViewModel]
+      var viewModel: Result<[MovieViewModel], Error>
     }
   }
   
@@ -40,7 +40,7 @@ struct MovieList {
   
   struct SetSort {
     struct Request {
-      let sortBy: String
+      let sortBy: SortB
     }
     struct Response {}
     struct ViewModel {}
@@ -51,4 +51,9 @@ struct MovieList {
     struct Response {}
     struct ViewModel {}
   }
+}
+
+enum SortB: String {
+  case desc
+  case asc
 }

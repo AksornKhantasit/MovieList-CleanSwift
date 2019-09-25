@@ -55,6 +55,7 @@ class MovieListViewController: UIViewController, MovieListViewControllerInterfac
     let bundle = Bundle(for: MovieTableViewCell.self)
     let nib = UINib(nibName: "MovieTableViewCell", bundle: bundle)
     tableView.register(nib, forCellReuseIdentifier: "MovieTableViewCell")
+    
     getMovies()
     
     refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
@@ -81,12 +82,12 @@ class MovieListViewController: UIViewController, MovieListViewControllerInterfac
     let alert = UIAlertController(title: "Sort", message: "you want to sort by...", preferredStyle: .alert)
     
     alert.addAction(UIAlertAction(title: "ASC", style: .default, handler: { (_) in
-      let request = MovieList.SetSort.Request(sortBy: "asc")
+      let request = MovieList.SetSort.Request(sortBy: .asc)
       self.interactor.setSort(request: request)
     }))
     
     alert.addAction(UIAlertAction(title: "DESC", style: .default, handler: { (_) in
-      let request = MovieList.SetSort.Request(sortBy: "desc")
+      let request = MovieList.SetSort.Request(sortBy: .desc)
       self.interactor.setSort(request: request)
     }))
     
@@ -101,9 +102,19 @@ class MovieListViewController: UIViewController, MovieListViewControllerInterfac
   var movieViewModels: [MovieList.GetMovies.ViewModel.MovieViewModel] = []
   
   func displayMovies(viewModel: MovieList.GetMovies.ViewModel) {
-    loadingView.isHidden = true
-    movieViewModels = viewModel.movieViewModels
-    tableView.reloadData()
+    switch viewModel.viewModel {
+    case .success(let data):
+      movieViewModels = data
+      loadingView.isHidden = true
+      tableView.reloadData()
+    case .failure(let error):
+      print(error)
+      let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+      let action = UIAlertAction(title: "OK", style: .destructive)
+      alert.addAction(action)
+      loadingView.isHidden = true
+      present(alert, animated: true)
+    }
   }
   
   func displaySelectedIndex(viewModel: MovieList.SetSelectedIndex.ViewModel) {

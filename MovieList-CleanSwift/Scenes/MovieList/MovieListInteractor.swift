@@ -38,11 +38,12 @@ class MovieListInteractor: MovieListInteractorInterface {
         else {
           self?.movies?.append(contentsOf: movies.results)
         }
-        let response = MovieList.GetMovies.Response(movies: self?.movies ?? [])
+        let response = MovieList.GetMovies.Response(result: .success(self?.movies ?? []))
         self?.presenter.presentMovies(response: response)
         self?.page += 1
       case .failure(let error):
-        print(error)
+        let response = MovieList.GetMovies.Response(result: .failure(error))
+        self?.presenter.presentMovies(response: response)
       }
     }
   }
@@ -54,10 +55,11 @@ class MovieListInteractor: MovieListInteractorInterface {
   }
   
   func setSort(request: MovieList.SetSort.Request) {
-    if request.sortBy == "asc" {
+    switch request.sortBy {
+    case .asc:
       sortBy = .asc
       page = 1
-    } else {
+    case .desc:
       sortBy = .desc
       page = 1
     }

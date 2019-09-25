@@ -20,7 +20,6 @@ protocol ReloadTableViewDelegate: class {
 class MovieDetailViewController: UIViewController, MovieDetailViewControllerInterface {
   var interactor: MovieDetailInteractorInterface!
   var router: MovieDetailRouter!
-  var rating: Double?
   var delegate: ReloadTableViewDelegate?
 
   @IBOutlet weak var movieImage: UIImageView!
@@ -63,19 +62,16 @@ class MovieDetailViewController: UIViewController, MovieDetailViewControllerInte
     getcosmos()
   }
   
-  override func viewDidDisappear(_ animated: Bool) {
-    setRating()
-    delegate?.reloadTableView()
-  }
-  
   // MARK: - Event handling
   
   func getcosmos()  {
     cosmos.settings.minTouchRating = 0
     cosmos.settings.fillMode = .half
     cosmos.didTouchCosmos = { rat in
-      self.rating = rat * 2
-      print("Rating: \(self.rating)")
+      //      self.rating = rat * 2
+      //      print("Rating: \(self.rating)")
+      self.setRating(rating: rat * 2)
+      self.delegate?.reloadTableView()
     }
   }
   
@@ -84,28 +80,29 @@ class MovieDetailViewController: UIViewController, MovieDetailViewControllerInte
     interactor.getMovieDetail(request: request)
   }
   
-  func setRating() {
-    if let rating = rating {
-      let request = MovieListDetail.SetRating.Request(rating: rating)
-      interactor.setRating(request: request)
-    }
+  func setRating(rating: Double) {
+    let request = MovieListDetail.SetRating.Request(rating: rating)
+    interactor.setRating(request: request)
   }
   
   // MARK: - Display logic
   
   func displayData(viewModel: MovieListDetail.GetMovieDetail.ViewModel) {
-    let baseURL = "https://image.tmdb.org/t/p/original"
-    let posterPath = viewModel.movieImage
-    if let posterPath = posterPath {
-      let url = URL(string: "\(baseURL)\(posterPath)")
-      movieImage.kf.setImage(with: url)
+    switch viewModel.viewModel {
+    case .success(let data):
+      movieImage.kf.setImage(with: data.movieImage)
+      titleName.text = data.title
+      popular.text = data.popular
+      overview.text = data.overview
+      category.text = data.category
+      language.text = data.language
+      cosmos.rating = data.rating
+    case .failure(let error):
+      let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+      let action = UIAlertAction(title: "OK", style: .destructive)
+      alert.addAction(action)
+      present(alert, animated: true)
     }
-    titleName.text = viewModel.title
-    popular.text = viewModel.popular
-    overview.text = viewModel.overview
-    category.text = viewModel.category
-    language.text = viewModel.language
-    cosmos.rating = viewModel.rating    
   }
   
   // MARK: - Router

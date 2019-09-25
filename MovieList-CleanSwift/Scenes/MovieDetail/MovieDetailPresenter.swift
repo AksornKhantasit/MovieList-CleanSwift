@@ -16,25 +16,41 @@ class MovieDetailPresenter: MovieDetailPresenterInterface {
   weak var viewController: MovieDetailViewControllerInterface!
   
   // MARK: - Presentation logic
-  
+
   func presentMovieDetail(response: MovieListDetail.GetMovieDetail.Response) {
-    let movieImageURL = response.movie.posterPath
-    let title = response.movie.title
-    let popular = "\(response.movie.popularity)"
-    let overview = response.movie.overview
-    var strCategory: [String] = []
-    for category in response.movie.genres {
-      strCategory.append(category.name)
+    let movie = response.movieDetail
+    
+    switch movie {
+    case .success(let movie):
+      let baseURL = "https://image.tmdb.org/t/p/original"
+      let posterPath = movie.posterPath
+      let posterURL = URL(string: "\(baseURL)\(posterPath ?? "")")
+
+      let title = movie.title
+      let popular = String(format: "%.2f", movie.popularity)
+      let overview = movie.overview
+      
+      var strCategory: [String] = []
+      for category in movie.genres {
+        strCategory.append(category.name)
+      }
+      let category = strCategory.joined(separator: " , ")
+      
+      let language = movie.Language
+      let id = Int(movie.id )
+      let rated = (UserDefaults.standard.double(forKey: "rating\(id)"))/2
+      print("getRating : \(rated)")
+  
+      let moviedetail = MovieListDetail.GetMovieDetail.ViewModel.data(movieImage: posterURL, title: title, popular: popular, overview: overview, category: category, language: language, rating: rated)
+      
+       let viewModel = MovieListDetail.GetMovieDetail.ViewModel(viewModel: .success(moviedetail))
+      viewController.displayData(viewModel: viewModel)
+   
+    case .failure(let error):
+      print(error)
+      let viewModel = MovieListDetail.GetMovieDetail.ViewModel(viewModel: .failure(error))
+      viewController.displayData(viewModel: viewModel)
     }
-    let category = strCategory.joined(separator: " , ")
-    let language = response.movie.Language
-    let id = Int(response.movie.id)
-    let rated = (UserDefaults.standard.double(forKey: "rating\(id)"))/2
-    print("getRating : \(rated)")
-    let viewModel = MovieListDetail.GetMovieDetail.ViewModel(movieImage: movieImageURL,title: title, popular: popular, overview: overview, category: category, language: language, rating: rated)
-    
-    viewController.displayData(viewModel: viewModel)
-    
   }
 }
 

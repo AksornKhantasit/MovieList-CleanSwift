@@ -11,7 +11,6 @@ import UIKit
 protocol MovieDetailInteractorInterface {
   func getMovieDetail(request: MovieListDetail.GetMovieDetail.Request)
   func setRating(request: MovieListDetail.SetRating.Request)
-  var movie: MovieDetail? { get set }
   var id: Int? { get set }
   
 }
@@ -30,11 +29,13 @@ class MovieDetailInteractor: MovieDetailInteractorInterface {
       worker?.getMovieDetail(id: id) { [weak self] apiResponse in
         switch apiResponse {
         case .success(let movies):
-          self?.movie = movies
-          let response = MovieListDetail.GetMovieDetail.Response(movie: movies)
-          self?.presenter.presentMovieDetail(response: response)
+            self?.movie = movies
+            let response = MovieListDetail.GetMovieDetail.Response(movieDetail: .success(movies))
+            self?.presenter.presentMovieDetail(response: response)
         case .failure(let error):
           print(error)
+          let response = MovieListDetail.GetMovieDetail.Response(movieDetail: .failure(error))
+          self?.presenter.presentMovieDetail(response: response)
         }
       }
     }

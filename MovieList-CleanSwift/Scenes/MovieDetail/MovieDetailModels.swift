@@ -13,16 +13,19 @@ struct MovieListDetail {
   struct GetMovieDetail {
     struct Request {}
     struct Response {
-        let movie: MovieDetail
+        let movieDetail: Result<MovieDetail, Error>
     }
     struct ViewModel {
-        let movieImage: String?
+      struct data {
+        let movieImage: URL?
         let title: String
         let popular: String
         let overview: String
         let category: String
         let language: String
         let rating: Double
+      }
+      var viewModel: Result<data, Error>
     }
   }
   
