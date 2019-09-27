@@ -13,10 +13,11 @@ protocol MovieListViewControllerInterface: class {
   func displaySelectedIndex(viewModel: MovieList.SetSelectedIndex.ViewModel)
   func displaySort(viewModel: MovieList.SetSort.ViewModel)
   func displayPullRefresh(viewModel: MovieList.PullRefresh.ViewModel)
+  func displayReloadCell(viewModel: MovieList.ReloadCell.ViewModel)
 }
 
 class MovieListViewController: UIViewController, MovieListViewControllerInterface {
- 
+
   var interactor: MovieListInteractorInterface!
   var router: MovieListRouter!
   var refreshControl = UIRefreshControl()
@@ -99,7 +100,7 @@ class MovieListViewController: UIViewController, MovieListViewControllerInterfac
   
   // MARK: - Display logic
   
-  var movieViewModels: [MovieList.GetMovies.ViewModel.MovieViewModel] = []
+  var movieViewModels: [MovieList.MovieViewModel] = []
   
   func displayMovies(viewModel: MovieList.GetMovies.ViewModel) {
     switch viewModel.viewModel {
@@ -128,6 +129,17 @@ class MovieListViewController: UIViewController, MovieListViewControllerInterfac
   func displayPullRefresh(viewModel: MovieList.PullRefresh.ViewModel) {
     getMovies()
   }
+  
+  func displayReloadCell(viewModel: MovieList.ReloadCell.ViewModel) {
+    for (index , value) in movieViewModels.enumerated() {
+      if viewModel.viewModel.id == value.id {
+        movieViewModels[index] = viewModel.viewModel
+        tableView.reloadData()
+      }
+    }
+  }
+  
+  
   
   // MARK: - Router
   
@@ -171,11 +183,13 @@ extension MovieListViewController: UITableViewDelegate {
     let id = movieViewModels[indexPath.row].id
     let request = MovieList.SetSelectedIndex.Request(id: id)
     interactor.setSelectedID(request: request)
+    
   }
 }
 
 extension MovieListViewController : ReloadTableViewDelegate {
-  func reloadTableView() {
-    tableView.reloadData()
+  func reloadTableView(movieId: Int) {
+       let request = MovieList.ReloadCell.Request(movieId: movieId)
+       interactor.reloadCell(request: request)
   }
 }

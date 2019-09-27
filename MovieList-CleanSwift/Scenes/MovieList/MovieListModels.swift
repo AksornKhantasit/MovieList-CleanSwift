@@ -9,23 +9,21 @@
 import UIKit
 
 struct MovieList {
+  struct MovieViewModel {
+    let id: Int
+    let title: String
+    let popular: String
+    let rating: String
+    let movieImage: URL?
+    let backdropImage: URL?
+  }
   
   struct GetMovies {
     struct Request {}
     struct Response {
       let result: Result<[Results], Error>
     }
-    
     struct ViewModel {
-      struct MovieViewModel {
-        let id: Int
-        let title: String
-        let popular: String
-        let rating: String
-        let movieImage: URL?
-        let backdropImage: URL?
-        
-      }
       var viewModel: Result<[MovieViewModel], Error>
     }
   }
@@ -50,6 +48,19 @@ struct MovieList {
     struct Request {}
     struct Response {}
     struct ViewModel {}
+  }
+  
+  struct ReloadCell  {
+    struct Request {
+      let movieId : Int
+    }
+    struct Response {
+      let movie : Results?
+      let movieId: Int
+    }
+    struct ViewModel {
+      var viewModel: MovieViewModel
+    }
   }
 }
 

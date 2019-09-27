@@ -10,9 +10,11 @@ import UIKit
 
 protocol MovieDetailPresenterInterface {
   func presentMovieDetail(response: MovieListDetail.GetMovieDetail.Response)
+  func presentGetMovieId(respense: MovieListDetail.getmoiveId.Response)
 }
 
 class MovieDetailPresenter: MovieDetailPresenterInterface {
+  
   weak var viewController: MovieDetailViewControllerInterface!
   
   // MARK: - Presentation logic
@@ -51,6 +53,13 @@ class MovieDetailPresenter: MovieDetailPresenterInterface {
       let viewModel = MovieListDetail.GetMovieDetail.ViewModel(viewModel: .failure(error))
       viewController.displayData(viewModel: viewModel)
     }
+  }
+  
+  func presentGetMovieId(respense: MovieListDetail.getmoiveId.Response) {
+    
+    let movieId = MovieListDetail.getmoiveId.ViewModel.GetMovieId(movieId: respense.movieId)
+    let viewModel = MovieListDetail.getmoiveId.ViewModel(viewmodel: movieId)
+    viewController.displayGetMovieId(viewModel: viewModel)
   }
 }
 

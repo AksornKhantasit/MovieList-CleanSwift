@@ -11,11 +11,13 @@ import UIKit
 protocol MovieDetailInteractorInterface {
   func getMovieDetail(request: MovieListDetail.GetMovieDetail.Request)
   func setRating(request: MovieListDetail.SetRating.Request)
+  func getmovieId(request: MovieListDetail.getmoiveId.Request)
   var id: Int? { get set }
   
 }
 
 class MovieDetailInteractor: MovieDetailInteractorInterface {
+ 
   var presenter: MovieDetailPresenterInterface!
   var worker: MovieDetailWorker?
   var movie: MovieDetail?
@@ -48,5 +50,10 @@ class MovieDetailInteractor: MovieDetailInteractorInterface {
       UserDefaults.standard.set( avg , forKey: "avg\(id)")
       print(avg)
     }
+  }
+  
+  func getmovieId(request: MovieListDetail.getmoiveId.Request) {
+    let response = MovieListDetail.getmoiveId.Response(movieId: id ?? 0)
+    presenter.presentGetMovieId(respense: response)
   }
 }

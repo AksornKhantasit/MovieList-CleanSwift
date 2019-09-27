@@ -12,12 +12,14 @@ import Kingfisher
 
 protocol MovieDetailViewControllerInterface: class {
   func displayData(viewModel: MovieListDetail.GetMovieDetail.ViewModel)
+  func displayGetMovieId(viewModel: MovieListDetail.getmoiveId.ViewModel)
 }
 protocol ReloadTableViewDelegate: class {
-  func reloadTableView()
+  func reloadTableView(movieId:Int)
 }
 
 class MovieDetailViewController: UIViewController, MovieDetailViewControllerInterface {
+ 
   var interactor: MovieDetailInteractorInterface!
   var router: MovieDetailRouter!
   var delegate: ReloadTableViewDelegate?
@@ -71,7 +73,9 @@ class MovieDetailViewController: UIViewController, MovieDetailViewControllerInte
       //      self.rating = rat * 2
       //      print("Rating: \(self.rating)")
       self.setRating(rating: rat * 2)
-      self.delegate?.reloadTableView()
+      
+      let request = MovieListDetail.getmoiveId.Request()
+      self.interactor.getmovieId(request: request)
     }
   }
   
@@ -104,6 +108,11 @@ class MovieDetailViewController: UIViewController, MovieDetailViewControllerInte
       present(alert, animated: true)
     }
   }
+  
+  func displayGetMovieId(viewModel: MovieListDetail.getmoiveId.ViewModel) {
+       delegate?.reloadTableView(movieId: viewModel.viewmodel.movieId)
+  }
+  
   
   // MARK: - Router
   

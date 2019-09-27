@@ -13,12 +13,13 @@ protocol MovieListInteractorInterface {
   func setSelectedID(request: MovieList.SetSelectedIndex.Request)
   func setSort(request: MovieList.SetSort.Request)
   func pullRefresh(request: MovieList.PullRefresh.Request)
+  func reloadCell(request: MovieList.ReloadCell.Request)
   var movies: [Results]? { get }
   var selectedID: Int? { get }
 }
 
 class MovieListInteractor: MovieListInteractorInterface {
-  
+ 
   var presenter: MovieListPresenterInterface!
   var worker: MovieListWorker?
   var movies: [Results]?
@@ -34,6 +35,7 @@ class MovieListInteractor: MovieListInteractorInterface {
       case .success(let movies):
         if self?.page == 1 {
           self?.movies = movies.results
+          
         }
         else {
           self?.movies?.append(contentsOf: movies.results)
@@ -64,12 +66,23 @@ class MovieListInteractor: MovieListInteractorInterface {
       page = 1
     }
     let response = MovieList.SetSort.Response()
-    presenter.SetSort(response: response)
+    presenter.setSort(response: response)
   }
   
   func pullRefresh(request: MovieList.PullRefresh.Request) {
     page = 1
     let response = MovieList.PullRefresh.Response()
     presenter.pullRefresh(response: response)
+  }
+  
+  func reloadCell(request: MovieList.ReloadCell.Request) {
+    if let movies = movies {
+      for (_ , value) in movies.enumerated() {
+        if request.movieId == Int(value.id) {
+          let response = MovieList.ReloadCell.Response(movie: value, movieId: request.movieId)
+          presenter.reloadCell(response: response)
+        }
+      }
+    }
   }
 }

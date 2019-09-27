@@ -18,18 +18,12 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var rating: UILabel!
     
     
-  func setupUI(viewModel: MovieList.GetMovies.ViewModel.MovieViewModel){
+  func setupUI(viewModel: MovieList.MovieViewModel){
     
     title.text = viewModel.title
     popular.text = viewModel.popular
-    //rating.text = viewModel.rating
-    let getavg = UserDefaults.standard.double(forKey: "avg\(viewModel.id)") 
-    if getavg == 0.0 {
-      rating.text = String(viewModel.rating)
-    }
-    else {
-      rating.text = String(format: "%.1f", getavg )
-    }
+    rating.text = viewModel.rating
+ 
     movieImage.kf.setImage(with: viewModel.movieImage)
     backdropImage.kf.setImage(with: viewModel.backdropImage)
   }

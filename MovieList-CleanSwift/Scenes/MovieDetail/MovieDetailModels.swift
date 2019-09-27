@@ -36,4 +36,17 @@ struct MovieListDetail {
     struct Response {}
     struct ViewModel {}
   }
+  struct getmoiveId {
+    struct Request {
+    }
+    struct Response {
+      let movieId: Int
+    }
+    struct ViewModel {
+      struct GetMovieId {
+        let movieId: Int
+      }
+      let viewmodel : GetMovieId
+    }
+  }
 }
